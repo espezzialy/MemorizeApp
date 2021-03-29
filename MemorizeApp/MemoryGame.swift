@@ -11,12 +11,23 @@ struct MemoryGame<CardContent> {
     var cards: Array<Card>
     
     
-    func choose(card: Card) {
+    mutating  func choose(card: Card) {
         print("card choosen: \(card)")
+        let chosenIndex: Int =  index(of: card)
+        cards[chosenIndex].isFaceUp = !cards[chosenIndex].isFaceUp
+        
     }
     
+    func index(of card: Card) -> Int {
+        for index in 0..<cards.count {
+            if self.cards[index].id == card.id {
+                return index
+            }
+        }
+        return -1 // TODO: bogus
+    }
     
-    
+      
     init(numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
         cards = Array<Card>()
         for pairIndex in 0..<numberOfPairsOfCards {
@@ -24,6 +35,7 @@ struct MemoryGame<CardContent> {
             cards.append(Card(content: content, id: pairIndex*2))
             cards.append(Card(content: content, id: pairIndex*2+1))
         }
+        cards = cards.shuffled()
     }
         
     
